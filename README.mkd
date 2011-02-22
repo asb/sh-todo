@@ -1,0 +1,121 @@
+# sh-todo: A minimal todo-list manager written in POSIX shell
+
+`sh-todo` is my take on the minimal, command-line task manager. It allows you 
+to add, view and complete tasks. Completed tasks are marked with a completion 
+date and appended to a log of completed tasks kept in a separate file. They 
+remain visible in your todo list until you choose to clear them.
+
+To install just put the `todo`, `todone` and `todone-archive` scripts to 
+somewhere in your `$PATH` and copy `sh-todo` to `~/.sh-todo`, editing it to 
+your tastes. `sh-todo` has no external dependencies beyond a POSIX-compliant 
+shell.
+
+# Quick start/usage
+
+For the following examples, you'll have to use your imagination and view 
+`--text--` as strike-through.
+
+Add a task (note, no need to enclose it in quotes):
+
+    $ todo clear inbox
+    $ todo pay rent
+
+View task list:
+
+    $ todo
+    • clear inbox
+    • pay rent
+
+Complete a task (just give a substring that will match):
+
+    $ todone inbox
+    • --clear inbox--
+
+View task list again:
+
+    $ todo
+    • clear inbox
+    • --pay rent (2011-02-22 16:42)--
+
+Take a look at the file containing the todo list (editing with a text editor 
+is encouraged):
+
+    $ cat path/to/my/todolist
+    TODO clear inbox
+    DONE pay rent (2011-02-22 16:42)
+
+Remove completed todo items from main todo list:
+
+    $ todo-archive
+    • --pay rent (2011-02-22 16:42)--
+
+# Configuration
+
+Look in `sh-todo` - it should be self-explanatory. You just need to set up 
+`TODO_F` and `TODONE_F` which are where your current todo list and list of 
+previously completed tasks are kept. Storing these files in a Dropbox or 
+Ubuntu One folder is useful for syncing between multiple machines.
+
+# Credits/inspiration
+
+* My main inspiration is from Jerod Santos' [todo/todone in two single-line shell functions](http://blog.jerodsanto.net/2010/12/minimally-awesome-todos/).
+* Projects with a similar philosophy include [t](http://stevelosh.com/projects/t/) and [t-](http://www.penzba.co.uk/t-/).
+
+# Questions/problems
+
+## How can I re-order tasks/delete without completing/edit existing tasks etc etc?
+
+Just open your todo list in your favourite text editor.
+
+## How can I review recently completed tasks?
+
+`tac /path/to/my/todone | less`
+
+## I can't see any visual difference between completed and uncompleted tasks
+
+Unfortunately the strike-through ANSI escape sequence is not supported in many 
+terminal emulators (in fact, gnome-terminal seems to be about the only one). I 
+have a suggested alternative escape sequence to use you can enable in 
+`~/.sh-todo`, which displays completed items in grey.
+
+## I'd like to present you with a Useless Use of Cat Award
+
+You may notice that the scripts tend to use `cat $TODO_F | while read -r LINE; 
+do ... done` where `while read -r LINE; do ... done < $TODO_F` would obviously 
+be preferred. The reason is that sadly my home directory is mounted over NFS 
+and the builtin `read` for `dash` (the default `/bin/sh` on Debian/Ubuntu) 
+only reads a single character at a time, which is incredibly slow in this 
+case. `cat` reads a 32K buffer thus avoiding the problem. It's not an ideal 
+solution, but it's the best way I have of solving the problem for now.
+
+# Contact
+
+If you have any comments, suggestions, patches either submit them through 
+github or email <asb@asbradbury.org>.
+
+# License
+
+Let's say MIT, but it's not really enough code to be worth it...
+
+    Copyright (c) 2011 Alex Bradbury
+
+    Permission is hereby granted, free of charge, to any person
+    obtaining a copy of this software and associated documentation
+    files (the "Software"), to deal in the Software without
+    restriction, including without limitation the rights to use,
+    copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the
+    Software is furnished to do so, subject to the following
+    conditions:
+
+    The above copyright notice and this permission notice shall be
+    included in all copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+    EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+    OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+    NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+    HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+    WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+    FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+    OTHER DEALINGS IN THE SOFTWARE.

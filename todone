@@ -1,0 +1,26 @@
+#!/bin/sh
+set -e
+
+. ~/.sh-todo
+
+PAT="$*"
+
+if [ -z "$PAT" ]; then
+  echo "Error: no task to mark done specified" >&2
+  exit 1
+fi
+
+echo -n > "$TODO_F.tmp"
+
+# intentional useless use of cat (see README)
+cat $TODO_F | while read -r LINE; do
+  if [ "${LINE#$TODO_PFX*$PAT}" != "$LINE" ]; then
+    # use printf to ensure backslace escapes are interpreted
+    printf "• $BEGIN_DONE${LINE#$TODO_PFX}$END_DONE\n"
+    LINE="$DONE_PFX${LINE#$TODO_PFX} ($(date "$DATE_FMT"))"
+    echo $LINE >> $TODONE_F
+  fi
+  echo $LINE >> "$TODO_F.tmp"
+done
+
+mv "$TODO_F.tmp" $TODO_F

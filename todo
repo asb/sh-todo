@@ -1,0 +1,22 @@
+#!/bin/sh
+set -e
+
+. ~/.sh-todo
+
+NEW_TODO="$*"
+
+# if no arguments, then print todo list instead
+if [ -z "$NEW_TODO" ]; then
+  # intentional useless use of cat (see README)
+  cat $TODO_F | while read -r LINE; do
+    if [ "${LINE#$DONE_PFX}" != "$LINE" ]; then
+      # use printf to ensure backslace escapes are interpreted
+      printf "• $BEGIN_DONE${LINE#$DONE_PFX}$END_DONE\n"
+    else
+      echo "• ${LINE#$TODO_PFX}"
+    fi
+  done
+  exit 0
+fi
+
+echo "$TODO_PFX$NEW_TODO" >> $TODO_F
