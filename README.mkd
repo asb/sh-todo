@@ -29,8 +29,8 @@ View task list:
 
 Complete a task (just give a substring that will match):
 
-    $ todone inbox
-    • --clear inbox--
+    $ todone rent
+    • --pay rent--
 
 View task list again:
 
