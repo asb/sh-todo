@@ -53,7 +53,7 @@ Remove completed todo items from main todo list:
 # Configuration
 
 Look in `sh-todo` - it should be self-explanatory. You just need to set up 
-`TODO_F` and `TODONE_F` which are where your current todo list and list of 
+`$TODO_F` and `$TODONE_F` which are where your current todo list and list of 
 previously completed tasks are kept. Storing these files in a Dropbox or 
 Ubuntu One folder is useful for syncing between multiple machines.
 
