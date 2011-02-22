@@ -13,7 +13,8 @@ shell.
 # Quick start/usage
 
 For the following examples, you'll have to use your imagination and view 
-`--text--` as strike-through.
+`--text--` as strike-through. Output uses the ANSI escape sequence for 
+strike-through by default, which will be rendered by your terminal if it supports it.
 
 Add a task (note, no need to enclose it in quotes):
 
