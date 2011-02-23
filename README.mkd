@@ -59,7 +59,7 @@ Ubuntu One folder is useful for syncing between multiple machines.
 
 # Credits/inspiration
 
-* My main inspiration is from Jerod Santos' [todo/todone in two single-line shell functions](http://blog.jerodsanto.net/2010/12/minimally-awesome-todos/).
+* My main inspiration is from Jerod Santo's [todo/todone in two single-line shell functions](http://blog.jerodsanto.net/2010/12/minimally-awesome-todos/).
 * Projects with a similar philosophy include [t](http://stevelosh.com/projects/t/) and [t-](http://www.penzba.co.uk/t-/).
 
 # Questions/problems
@@ -84,10 +84,12 @@ have a suggested alternative escape sequence to use you can enable in
 You may notice that the scripts tend to use `cat $TODO_F | while read -r LINE; 
 do ... done` where `while read -r LINE; do ... done < $TODO_F` would obviously 
 be preferred. The reason is that sadly my home directory is mounted over NFS 
-and the builtin `read` for `dash` (the default `/bin/sh` on Debian/Ubuntu) 
-only reads a single character at a time, which is incredibly slow in this 
-case. `cat` reads a 32K buffer thus avoiding the problem. It's not an ideal 
-solution, but it's the best way I have of solving the problem for now.
+without attribute caching and the builtin `read` for `dash` (the default 
+`/bin/sh` on Debian/Ubuntu) only reads a single character at a time, which is 
+incredibly slow in this case. `cat` reads a 32K buffer thus avoiding the 
+problem. It's not an ideal solution, but it's the best way I have of solving 
+the problem for now. Feel free to change it in your own copy if it offends 
+your sensibilities.
 
 # Contact
 
