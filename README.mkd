@@ -79,18 +79,6 @@ terminal emulators (in fact, gnome-terminal seems to be about the only one). I
 have a suggested alternative escape sequence to use you can enable in 
 `~/.sh-todo`, which displays completed items in grey.
 
-## I'd like to present you with a Useless Use of Cat Award
-
-You may notice that the scripts tend to use `cat $TODO_F | while read -r LINE; 
-do ... done` where `while read -r LINE; do ... done < $TODO_F` would obviously 
-be preferred. The reason is that sadly my home directory is mounted over NFS 
-without attribute caching and the builtin `read` for `dash` (the default 
-`/bin/sh` on Debian/Ubuntu) only reads a single character at a time, which is 
-incredibly slow in this case. `cat` reads a 32K buffer thus avoiding the 
-problem. It's not an ideal solution, but it's the best way I have of solving 
-the problem for now. Feel free to change it in your own copy if it offends 
-your sensibilities.
-
 # Contact
 
 If you have any comments, suggestions, patches either submit them through 

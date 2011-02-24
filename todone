@@ -12,8 +12,7 @@ fi
 
 echo -n > "$TODO_F.tmp"
 
-# intentional useless use of cat (see README)
-cat $TODO_F | while read -r LINE; do
+while read -r LINE; do
   if [ "${LINE#$TODO_PREFIX*$PAT}" != "$LINE" ]; then
     # use printf to ensure backslash escapes are interpreted
     printf "• $BEGIN_DONE${LINE#$TODO_PREFIX}$END_DONE\n"
@@ -21,6 +20,6 @@ cat $TODO_F | while read -r LINE; do
     echo $LINE >> $TODONE_F
   fi
   echo $LINE >> "$TODO_F.tmp"
-done
+done < $TODO_F
 
 mv "$TODO_F.tmp" $TODO_F
