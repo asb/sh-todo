@@ -1,0 +1,20 @@
+#!/bin/sh
+set -e
+
+. ~/.sh-todo
+
+LUA_SCRIPT=$(cat <<EOF
+local prev_date
+for line in io.lines() do
+  local desc, date, time = line:match("^DONE (.*) %((.*) (.*)%)$")
+  if (date ~= prev_date) then
+    local year, month, day = date:match("^(.*)-(.*)-(.*)$")
+    local day_str = os.date("%A %d %B %Y", os.time({year=year, month=month, day=day}))
+    print("\n"..day_str.."\n")
+  end
+  print(("• %s (%s)"):format(desc, time))
+  prev_date = date
+end
+EOF
+)
+tac $TODONE_F | lua -e "$LUA_SCRIPT" | less
