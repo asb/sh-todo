@@ -1,5 +1,9 @@
 #!/bin/sh
+# Show a formatted list of completed tasks
 set -e
+
+TAC=tac
+#TAC="tail -r"
 
 . ~/.sh-todo
 
@@ -17,4 +21,4 @@ for line in io.lines() do
 end
 EOF
 )
-tac $TODONE_F | lua -e "$LUA_SCRIPT" | less
+$TAC $TODONE_F | lua -e "$LUA_SCRIPT" | less
