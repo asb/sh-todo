@@ -24,4 +24,4 @@ while read -r LINE; do
   echo $LINE >> "$TODO_F.tmp"
 done < $TODO_F
 
-mv "$TODO_F.tmp" $TODO_F
+mv "$TODO_F.tmp" "$TODO_F"

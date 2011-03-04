@@ -24,4 +24,4 @@ for line in io.lines() do
 end
 EOF
 )
-$TAC $TODONE_F | lua -e "$LUA_SCRIPT" | less
+$TAC "$TODONE_F" | lua -e "$LUA_SCRIPT" | less

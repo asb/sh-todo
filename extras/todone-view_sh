@@ -10,7 +10,7 @@ TAC=tac
 
 . ~/.sh-todo
 
-$TAC $TODONE_F | while read -r LINE; do
+$TAC "$TODONE_F" | while read -r LINE; do
   TRIMLINE=${LINE%(*)} # strip the timestamp
   TIMESTAMP=${LINE#"$TRIMLINE("}
   TIMESTAMP=${TIMESTAMP%)}

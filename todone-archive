@@ -18,4 +18,4 @@ while read -r LINE; do
   fi;
 done < $TODO_F
 
-mv "$TODO_F.tmp" $TODO_F
+mv "$TODO_F.tmp" "$TODO_F"
