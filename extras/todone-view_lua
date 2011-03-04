@@ -1,4 +1,7 @@
 #!/bin/sh
+# Part of sh-todo:
+# https://github.com/asb/sh-todo
+#
 # Show a formatted list of completed tasks
 set -e
 

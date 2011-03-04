@@ -1,4 +1,7 @@
 # Configure this as you wish and place it in ~/.sh-todo
+# Part of sh-todo:
+# https://github.com/asb/sh-todo
+
 TODO_F=~/Dropbox/todo
 TODONE_F=~/Dropbox/todone
 

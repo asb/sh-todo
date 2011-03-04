@@ -1,4 +1,7 @@
 #!/bin/sh
+# Part of sh-todo:
+# https://github.com/asb/sh-todo
+#
 # Remove all DONE lines from $TODO_F. All such lines will already have been 
 # added to $TODONE_F
 set -e

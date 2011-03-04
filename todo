@@ -1,4 +1,6 @@
 #!/bin/sh
+# Part of sh-todo:
+# https://github.com/asb/sh-todo
 set -e
 
 . ~/.sh-todo
