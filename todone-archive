@@ -12,7 +12,8 @@ echo -n > "$TODO_F.tmp"
 
 while read -r LINE; do
   if [ "${LINE#$DONE_PREFIX}" != "$LINE" ]; then
-    echo "• $BEGIN_DONE${LINE#$DONE_PREFIX}$END_DONE"
+    # use printf to ensure backslash escapes are interpreted
+    printf "• $BEGIN_DONE${LINE#$DONE_PREFIX}$END_DONE\n"
   else
     echo $LINE >> "$TODO_F.tmp"
   fi;
