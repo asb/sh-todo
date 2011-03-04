@@ -70,7 +70,16 @@ Just open your todo list in your favourite text editor.
 
 ## How can I review recently completed tasks?
 
-`tac /path/to/my/todone | less`
+`tac /path/to/my/todone | less` or for a more neatly-formatted solution use 
+one of the `todone-view` implementations which can be found in the `extras/` 
+directory of this repository.
+
+## What is the `extras/` directory?
+
+This directory holds scripts which may have any combination of the following 
+properties: experimental, reliant on non-POSIX tools or languages, or 
+implementing a feature that is unlikely to be widely useful. Contributions 
+welcome.
 
 ## I can't see any visual difference between completed and uncompleted tasks
 

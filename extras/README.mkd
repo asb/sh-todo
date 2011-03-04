@@ -1,0 +1,8 @@
+# Purpose of the `/extras` directory
+
+This directory holds scripts which may have any combination of the following 
+properties: experimental, reliant on non-POSIX tools or languages, or 
+implementing a feature that is unlikely to be widely useful.
+
+`todone-view` will print a formatted list of completed tasks in 
+reverse-chronological order, with a different section for each day.
