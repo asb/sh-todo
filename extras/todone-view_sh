@@ -1,0 +1,23 @@
+#!/bin/sh
+# Show a formatted list of completed tasks
+set -e
+
+TAC=tac
+#TAC="tail -r"
+
+. ~/.sh-todo
+
+$TAC $TODONE_F | while read -r LINE; do
+  TRIMLINE=${LINE%(*)} # strip the timestamp
+  TIMESTAMP=${LINE#"$TRIMLINE("}
+  TIMESTAMP=${TIMESTAMP%)}
+
+  DATE=${TIMESTAMP%% [0-9][0-9]:[0-9][0-9]}
+  TIME=${TIMESTAMP#"$DATE "}
+
+  if [ "$DATE" != "$LASTDATE" ]; then
+    printf "\n$(date -d"$DATE" "+%A %d %B %Y")\n\n"
+  fi
+  echo "• ${TRIMLINE#$DONE_PREFIX}($TIME)"
+  LASTDATE=$DATE
+done | less
