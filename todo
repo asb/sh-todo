@@ -11,13 +11,12 @@ NEW_TODO="$*"
 if [ -z "$NEW_TODO" ]; then
   while read -r LINE; do
     if [ "${LINE#$DONE_PREFIX}" != "$LINE" ]; then
-      # use printf to ensure backslash escapes are interpreted
-      printf "• $BEGIN_DONE${LINE#$DONE_PREFIX}$END_DONE\n"
+      printf "• $BEGIN_DONE%s$END_DONE\n" "${LINE#$DONE_PREFIX}"
     else
-      echo "• ${LINE#$TODO_PREFIX}"
+      printf "• %s\n" "${LINE#$TODO_PREFIX}"
     fi
   done < "$TODO_F"
   exit 0
 fi
 
-echo "$TODO_PREFIX$NEW_TODO" >> "$TODO_F"
+printf "$TODO_PREFIX%s\n" "$NEW_TODO" >> "$TODO_F"

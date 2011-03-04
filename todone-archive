@@ -8,14 +8,13 @@ set -e
 
 . ~/.sh-todo
 
-echo -n > "$TODO_F.tmp"
+touch "$TODO_F.tmp"
 
 while read -r LINE; do
   if [ "${LINE#$DONE_PREFIX}" != "$LINE" ]; then
-    # use printf to ensure backslash escapes are interpreted
-    printf "• $BEGIN_DONE${LINE#$DONE_PREFIX}$END_DONE\n"
+    printf "• $BEGIN_DONE%s$END_DONE\n" "${LINE#$DONE_PREFIX}"
   else
-    echo $LINE >> "$TODO_F.tmp"
+    printf "%s\n" "$LINE" >> "$TODO_F.tmp"
   fi;
 done < "$TODO_F"
 

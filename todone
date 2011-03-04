@@ -8,20 +8,20 @@ set -e
 PAT="$*"
 
 if [ -z "$PAT" ]; then
-  echo "Error: no task to mark done specified" >&2
+  printf "Error: no task to mark done specified\n" >&2
   exit 1
 fi
 
-echo -n > "$TODO_F.tmp"
+touch "$TODO_F.tmp"
 
 while read -r LINE; do
   if [ "${LINE#$TODO_PREFIX*$PAT}" != "$LINE" ]; then
-    # use printf to ensure backslash escapes are interpreted
-    printf "• $BEGIN_DONE${LINE#$TODO_PREFIX}$END_DONE\n"
-    LINE="$DONE_PREFIX${LINE#$TODO_PREFIX} ($(date "$DATE_FMT"))"
-    echo $LINE >> "$TODONE_F"
+    TASK="${LINE#$TODO_PREFIX}"
+    printf "• $BEGIN_DONE%s$END_DONE\n" "$TASK"
+    LINE=$(printf "$DONE_PREFIX%s ($(date "$DATE_FMT"))" "$TASK")
+    printf "%s\n" "$LINE" >> "$TODONE_F"
   fi
-  echo $LINE >> "$TODO_F.tmp"
+  printf "%s\n" "$LINE" >> "$TODO_F.tmp"
 done < "$TODO_F"
 
 mv "$TODO_F.tmp" "$TODO_F"
