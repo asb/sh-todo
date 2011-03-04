@@ -16,6 +16,6 @@ while read -r LINE; do
   else
     echo $LINE >> "$TODO_F.tmp"
   fi;
-done < $TODO_F
+done < "$TODO_F"
 
 mv "$TODO_F.tmp" "$TODO_F"

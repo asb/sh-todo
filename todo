@@ -16,8 +16,8 @@ if [ -z "$NEW_TODO" ]; then
     else
       echo "• ${LINE#$TODO_PREFIX}"
     fi
-  done < $TODO_F
+  done < "$TODO_F"
   exit 0
 fi
 
-echo "$TODO_PREFIX$NEW_TODO" >> $TODO_F
+echo "$TODO_PREFIX$NEW_TODO" >> "$TODO_F"
