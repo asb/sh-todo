@@ -1,0 +1,17 @@
+#!/bin/sh
+# Part of sh-todo:
+# https://github.com/asb/sh-todo
+#
+# Re-sort the todone file by task completion time. Helpful if you made manual 
+# edits to completion times and don't want to manually reorder lines.
+set -e
+
+. ~/.sh-todo
+# First prepend lines with timestamp
+# Then perform a stable sort based on this timestamp
+# Finally remove the prepended timestamp
+sed -e "s/\(.*\)(\(.*\))$/\2 \1(\2)/" "$TODONE_F" | \
+sort -s -k1,2 | \
+sed -e "s/.*\(DONE.*\)/\1/" > "$TODONE_F.tmp"
+
+mv "$TODONE_F.tmp" "$TODONE_F"

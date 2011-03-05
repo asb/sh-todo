@@ -6,3 +6,8 @@ implementing a feature that is unlikely to be widely useful.
 
 `todone-view` will print a formatted list of completed tasks in 
 reverse-chronological order, with a different section for each day.
+
+`todone-resort` will re-sort the todone file by task completion time. Under 
+normal usage of the `todone` command this will be unnecessary, but it is 
+useful if you manually edited completion times in the todone file and don't 
+want to manually reorder lines.
