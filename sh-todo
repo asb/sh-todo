@@ -10,6 +10,3 @@ END_DONE="\033[29m"
 # Uncomment these if your terminal doesn't support strike-through
 #BEGIN_DONE="\033[37m"
 #END_DONE="\033[39m"
-TODO_PREFIX="TODO "
-DONE_PREFIX="DONE "
-DATE_FMT="+%Y-%m-%d %R"

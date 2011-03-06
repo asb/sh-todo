@@ -21,6 +21,6 @@ $TAC "$TODONE_F" | while read -r LINE; do
   if [ "$DATE" != "$LASTDATE" ]; then
     printf "\n$(date -d"$DATE" "+%A %d %B %Y")\n\n"
   fi
-  printf "• %s($TIME)\n" "${TRIMLINE#$DONE_PREFIX}"
+  printf "• %s($TIME)\n" "${TRIMLINE#DONE }"
   LASTDATE=$DATE
 done | less

@@ -11,8 +11,8 @@ set -e
 touch "$TODO_F.tmp"
 
 while read -r LINE; do
-  if [ "${LINE#$DONE_PREFIX}" != "$LINE" ]; then
-    printf "• $BEGIN_DONE%s$END_DONE\n" "${LINE#$DONE_PREFIX}"
+  if [ "${LINE#DONE }" != "$LINE" ]; then
+    printf "• $BEGIN_DONE%s$END_DONE\n" "${LINE#DONE }"
   else
     printf "%s\n" "$LINE" >> "$TODO_F.tmp"
   fi;

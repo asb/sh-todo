@@ -15,10 +15,10 @@ fi
 touch "$TODO_F.tmp"
 
 while read -r LINE; do
-  if [ "${LINE#$TODO_PREFIX*$PAT}" != "$LINE" ]; then
-    TASK="${LINE#$TODO_PREFIX}"
+  if [ "${LINE#TODO *$PAT}" != "$LINE" ]; then
+    TASK="${LINE#TODO }"
     printf "• $BEGIN_DONE%s$END_DONE\n" "$TASK"
-    LINE=$(printf "$DONE_PREFIX%s ($(date "$DATE_FMT"))" "$TASK")
+    LINE=$(printf "DONE %s ($(date "+%Y-%m-%d %R"))" "$TASK")
     printf "%s\n" "$LINE" >> "$TODONE_F"
   fi
   printf "%s\n" "$LINE" >> "$TODO_F.tmp"
