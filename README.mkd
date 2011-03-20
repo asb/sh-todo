@@ -66,7 +66,10 @@ Ubuntu One folder is useful for syncing between multiple machines.
 
 ## How can I re-order tasks/delete without completing/edit existing tasks etc etc?
 
-Just open your todo list in your favourite text editor.
+Just open your todo list in your favourite text editor. If you're a vim user, 
+you'll likely find it helpful to set bindings such as 
+[these](http://vim.wikia.com/wiki/Moving_lines_up_or_down) to assist in 
+re-ordering.
 
 ## How can I review recently completed tasks?
 
