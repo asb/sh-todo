@@ -12,7 +12,7 @@ if [ -z "$PAT" ]; then
   exit 1
 fi
 
-touch "$TODO_F.tmp"
+> "$TODO_F.tmp"
 
 HAD_MATCH=0
 while read -r LINE; do
@@ -28,6 +28,7 @@ done < "$TODO_F"
 
 if [ $HAD_MATCH -eq 0 ]; then
   printf "Error: no tasks matched the given pattern\n" >&2
+  rm "$TODO_F.tmp"
   exit 1
 fi
 

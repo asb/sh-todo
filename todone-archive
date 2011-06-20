@@ -8,7 +8,7 @@ set -e
 
 . ~/.sh-todo
 
-touch "$TODO_F.tmp"
+> "$TODO_F.tmp"
 
 while read -r LINE; do
   if [ "${LINE#DONE }" != "$LINE" ]; then
