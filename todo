@@ -42,6 +42,7 @@ parse_linetags() {
 # If given a todo, then add that to the list of tasks. Otherwise, print all 
 # todo items which have the given tags
 do_todo() {
+  [ -e "$TODO_F" ] || touch "$TODO_F"
   if [ -z "$INPUT" ]; then # No todo given, so print current tasks with matching tags
     while read -r LINE; do
       if match_tags "$ARGTAGS" "$(parse_linetags "$LINE")"; then
