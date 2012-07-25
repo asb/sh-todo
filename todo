@@ -5,18 +5,148 @@ set -e
 
 . ~/.sh-todo
 
-NEW_TODO="$*"
+SCRIPTNAME=$(basename $0)
 
-# if no arguments, then print todo list instead
-if [ -z "$NEW_TODO" ]; then
-  while read -r LINE; do
-    if [ "${LINE#DONE }" != "$LINE" ]; then
-      printf "• $BEGIN_DONE%s$END_DONE\n" "${LINE#DONE }"
-    else
-      printf "• %s\n" "${LINE#TODO }"
+# Return 0 if $2 contains all tags in $1 and 1 otherwise. Returns 0 in the 
+# case that $1 is empty.
+match_tags() {
+  WANTEDTAGS=$1
+  LINETAGS="$2 "
+  for TAG in $WANTEDTAGS; do
+    if [ "${LINETAGS#*$TAG }" = "$LINETAGS" ]; then
+      return 1
     fi
-  done < "$TODO_F"
-  exit 0
-fi
+  done
+  return 0
+}
 
-printf "TODO %s\n" "$NEW_TODO" >> "$TODO_F"
+output_line() {
+  LINE=$1
+  if [ "${LINE#DONE }" != "$LINE" ]; then
+    printf "• $BEGIN_DONE%s$END_DONE\n" "${LINE#DONE }"
+  else
+    printf "• %s\n" "${LINE#TODO }"
+  fi
+}
+
+parse_linetags() {
+  LINETAGS="${1#*\[}"
+  if [ "$LINETAGS" != "$LINE" ]; then
+    LINETAGS="${LINETAGS%]*} "
+  else
+    LINETAGS=""
+  fi
+  printf "%s" "$LINETAGS"
+}
+
+# If given a todo, then add that to the list of tasks. Otherwise, print all 
+# todo items which have the given tags
+do_todo() {
+  if [ -z "$INPUT" ]; then # No todo given, so print current tasks with matching tags
+    while read -r LINE; do
+      if match_tags "$ARGTAGS" "$(parse_linetags "$LINE")"; then
+        output_line "$LINE"
+      fi
+    done < "$TODO_F"
+  else # Must be adding a new todo
+    printf "TODO %s%s\n" "$INPUT" "${ARGTAGS:+ [$ARGTAGS]}" >> "$TODO_F"
+  fi
+  exit 0
+}
+
+# Mark any tasks matching the given pattern as done. Tags can also be 
+# specified to limit the scope of the match
+do_todone() {
+  if [ -z "$INPUT" ]; then
+    printf "Error: no todo to mark done specified\n" >&2
+    exit 1
+  fi
+
+  > "$TODO_F.tmp"
+
+  HAD_MATCH=0
+  while read -r LINE; do
+    if [ "${LINE#TODO *$INPUT}" != "$LINE" ] && match_tags "$ARGTAGS" "$(parse_linetags "$LINE")"; then
+      HAD_MATCH=1
+      TASK="${LINE#TODO }"
+      LINE=$(printf "DONE %s ($(date "+%Y-%m-%d %R"))" "$TASK")
+      output_line "$LINE"
+      printf "%s\n" "$LINE" >> "$TODONE_F"
+    fi
+    printf "%s\n" "$LINE" >> "$TODO_F.tmp"
+  done < "$TODO_F"
+
+  if [ $HAD_MATCH -eq 0 ]; then
+    printf "Error: no tasks matched the given pattern\n" >&2
+    rm "$TODO_F.tmp"
+    exit 1
+  fi
+
+  mv "$TODO_F.tmp" "$TODO_F"
+}
+
+# Remove all DONE lines with the given tags from $TODO_F. All such lines will 
+# already have been added to $TODONE_F
+do_todone_archive() {
+  > "$TODO_F.tmp"
+
+  while read -r LINE; do
+    if [ "${LINE#DONE }" != "$LINE" ] && match_tags "$ARGTAGS" "$(parse_linetags "$LINE")"; then
+      output_line "$LINE"
+    else
+      printf "%s\n" "$LINE" >> "$TODO_F.tmp"
+    fi;
+  done < "$TODO_F"
+
+  mv "$TODO_F.tmp" "$TODO_F"
+}
+
+# Show a formatted list of completed tasks (can be limited by specifying 
+# desired tags).
+# This function uses tac which is non-POSIX, as is the -d argument to date
+do_todone_view() {
+  TAC=tac
+  #TAC="tail -r" # For OSX/BSD
+
+  $TAC "$TODONE_F" | while read -r LINE; do
+    if ! match_tags "$ARGTAGS" "$(parse_linetags "$LINE")"; then
+      continue;
+    fi
+    TRIMLINE=${LINE%(*)} # strip the timestamp
+    TIMESTAMP=${LINE#"$TRIMLINE("}
+    TIMESTAMP=${TIMESTAMP%)}
+
+    DATE=${TIMESTAMP%% [0-9][0-9]:[0-9][0-9]}
+    TIME=${TIMESTAMP#"$DATE "}
+
+    if [ "$DATE" != "$LASTDATE" ]; then
+      printf "\n$(date -d"$DATE" "+%A %d %B %Y")\n\n"
+    fi
+    printf "• %s($TIME)\n" "${TRIMLINE#DONE }"
+    LASTDATE=$DATE
+  done | less
+}
+
+# Parse arguments
+ARGTAGS=""
+INPUT=""
+for ARG in "$@"; do
+  if [ "${ARG#@}" != "$ARG" ]; then
+    ARGTAGS="${ARGTAGS:+$ARGTAGS }$ARG"
+  else
+    INPUT="${INPUT:+$INPUT }$ARG"
+  fi
+done
+
+if [ "$SCRIPTNAME" = "todo" ]; then
+  do_todo
+elif [ "$SCRIPTNAME" = "todone" ]; then
+  do_todone
+elif [ "$SCRIPTNAME" = "todone-archive" ]; then
+  do_todone_archive
+elif [ "$SCRIPTNAME" = "todone-view" ]; then
+  do_todone_view
+else
+  printf "Error: this is a multicall script, but was called with unrecognised script name '%s'\n" "$SCRIPTNAME" >&2
+  exit 1
+fi

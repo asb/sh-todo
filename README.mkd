@@ -1,9 +1,12 @@
 # sh-todo: A minimal todo-list manager written in POSIX shell
 
 `sh-todo` is my take on the minimal, command-line task manager. It allows you 
-to add, view and complete tasks. Completed tasks are marked with a completion 
-date and appended to a log of completed tasks kept in a separate file. They 
-remain visible in your todo list until you choose to clear them.
+to add, view and complete tasks. It also supports marking tasks with a 
+label/tag/project/context (whatever you want to call it) and filtering the 
+effect of the supported commands to apply to only tasks with that label.  
+Completed tasks are marked with a completion date and appended to a log of 
+completed tasks kept in a separate file. They remain visible in your todo list 
+until you choose to clear them.
 
 To install just put the `todo`, `todone` and `todone-archive` scripts to 
 somewhere in your `$PATH` and copy `sh-todo` to `~/.sh-todo`, editing it to 
@@ -14,41 +17,48 @@ shell.
 
 For the following examples, you'll have to use your imagination and view 
 `--text--` as strike-through. Output uses the ANSI escape sequence for 
-strike-through by default, which will be rendered by your terminal if it supports it.
+strike-through by default, which will be rendered by your terminal if it 
+supports it.
 
 Add a task (note, no need to enclose it in quotes):
 
-    $ todo clear inbox
-    $ todo pay rent
+    $ todo update gogdl to take account changes to gog login @hacking @evening
+    $ todo make appointment with doctor for next Monday @chore
 
 View task list:
 
     $ todo
-    • clear inbox
-    • pay rent
+    • update gogdl to take account changes to gog login [@hacking @evening]
+    • make appointment with doctor for next Monday [@chore]
 
-Complete a task (just give a substring that will match):
+Complete a task (just give a substring that will match, optionally limit match
+to given @labels):
 
-    $ todone rent
-    • --pay rent--
+    $ todone make appointment
+    • --make appointment with doctor for next Monday [@chore] (2012-07-25 16:53)--
 
 View task list again:
 
     $ todo
-    • clear inbox
-    • --pay rent (2011-02-22 16:42)--
+    • update gogdl to take account changes to gog login [@hacking @evening]
+    • --make appointment with doctor for next Monday [@chore] (2012-07-25 16:53)--
 
 Take a look at the file containing the todo list (editing with a text editor 
 is encouraged):
 
     $ cat path/to/my/todolist
-    TODO clear inbox
-    DONE pay rent (2011-02-22 16:42)
+    TODO update gogdl to take account changes to gog login [@hacking @evening]
+    DONE make appointment with doctor for next Monday [@chore] (2012-07-25 16:53)
+
+View tasks with a given label:
+
+    $ todo @hacking
+    • update gogdl to take account changes to gog login [@hacking @evening]
 
 Remove completed todo items from main todo list:
 
-    $ todo-archive
-    • --pay rent (2011-02-22 16:42)--
+    $ todone-archive
+    • --make appointment with doctor for next Monday [@chore] (2012-07-25 16:53)--
 
 # Configuration
 
@@ -61,6 +71,9 @@ Ubuntu One folder is useful for syncing between multiple machines.
 
 * My main inspiration is from Jerod Santo's [todo/todone in two single-line shell functions](http://blog.jerodsanto.net/2010/12/minimally-awesome-todos/).
 * Projects with a similar philosophy include [t](http://stevelosh.com/projects/t/) and [t-](http://www.penzba.co.uk/t-/).
+* See also 
+[gtdo](http://www.theoldmonk.net/blog/archives/2008/01/28/commandline_gtd_with_gtdo/) 
+which is a nice minimal todo system with GTD contexts and projects
 
 # Questions/problems
 
@@ -73,9 +86,10 @@ re-ordering.
 
 ## How can I review recently completed tasks?
 
-`tac /path/to/my/todone | less` or for a more neatly-formatted solution use 
-one of the `todone-view` implementations which can be found in the `extras/` 
-directory of this repository.
+The todone file format is readable enough that `tac /path/to/my/todone | less` 
+may be sufficient, or for a more neatly-formatted solution use `todone-view` 
+which will group completed tasks in to the days they were completed, and 
+supports filtering by the given labels.
 
 ## What is the `extras/` directory?
 
@@ -98,9 +112,9 @@ github or email <asb@asbradbury.org>.
 
 # License
 
-Let's say MIT, but it's not really enough code to be worth it...
+Released under the MIT license reproduced below:
 
-    Copyright (c) 2011 Alex Bradbury
+    Copyright (c) 2011, 2012 Alex Bradbury
 
     Permission is hereby granted, free of charge, to any person
     obtaining a copy of this software and associated documentation
