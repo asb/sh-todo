@@ -1,0 +1,43 @@
+#!/bin/sh
+# Part of loamok/sh-todo:
+# https://github.com/loamok/sh-todo
+# forked from asb/sh-todo
+# https://github.com/asb/sh-todo
+#
+# Install the todo* files into a classic Gnu-Linux system.
+# Requires root acces rights.
+set -e
+
+##--------------------------------------------------
+## Editable zone
+
+# Cp command used with 'sudo' to insure root rights
+# comment this line and the below to run sudo by yourself.
+CP="sudo cp -a"
+
+## Alternative cp command without sudo for thoses who prefer.
+## Uncomment to active it.
+#CP="cp -a"
+
+# Chown command to insure mapping files to root
+# same management as with cp ...
+CHOWN="sudo chown -R root:root"
+
+## Alternative chown command not tested if not root launched.
+#CHOWN="chown -R root:root"
+
+#Destination of instalation
+DEST=/usr/bin
+DESTETC=/etc/default
+
+## End of editable zone
+##---------------------------------------------------
+
+#Install process
+cd ../
+$CP todo* $DEST/
+$CP extras/todo-activate $DEST/todo-activate
+$CHOWN $DEST/todo*
+$CP sh-todo $DESTETC/sh-todo
+$CP sh-todo ~/.sh-todo
+echo "Install Ok"

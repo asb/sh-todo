@@ -1,0 +1,11 @@
+#!/bin/sh
+# Part of loamok/sh-todo:
+# https://github.com/loamok/sh-todo
+# forked from asb/sh-todo
+# https://github.com/asb/sh-todo
+#
+# Activate (copy) the sh-todo file in the user home
+
+CP="cp -a"
+
+$CP $DESTETC/sh-todo ~/.sh-todo
