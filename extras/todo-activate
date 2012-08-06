@@ -8,4 +8,8 @@
 
 CP="cp -a"
 
+#Destination of instalation
+DESTETC=/etc/default
+
+
 $CP $DESTETC/sh-todo ~/.sh-todo
