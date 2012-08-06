@@ -11,3 +11,7 @@ reverse-chronological order, with a different section for each day.
 normal usage of the `todone` command this will be unnecessary, but it is 
 useful if you manually edited completion times in the todone file and don't 
 want to manually reorder lines.
+
+`todo-install` will install sh-todo into a standard Gnu-Linux arch.
+
+`todo-activate` will copy the sh-todo config file at the good place of the user home.
