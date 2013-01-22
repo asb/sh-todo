@@ -32,7 +32,7 @@ output_line() {
 parse_linetags() {
   LINETAGS="${1#*\[}"
   if [ "$LINETAGS" != "$LINE" ]; then
-    LINETAGS="${LINETAGS%]*} "
+    LINETAGS="${LINETAGS%]*}"
   else
     LINETAGS=""
   fi
@@ -51,6 +51,43 @@ do_todo() {
     done < "$TODO_F"
   else # Must be adding a new todo
     printf "TODO %s%s\n" "$INPUT" "${ARGTAGS:+ [$ARGTAGS]}" >> "$TODO_F"
+  fi
+  exit 0
+}
+
+do_todo_edit() {
+  [ -n "$SAVEFILE" ] && > "$TODO_F.tmp"
+  while read -r LINE; do
+    if [ "${LINE#TODO *$INPUT}" != "$LINE" ] && match_tags "$ARGTAGS" "$(parse_linetags "$LINE")"; then
+      LINETAGS=$(parse_linetags "$LINE")
+      LINEPREFIX=${LINE% \[$LINETAGS\]}
+      LINETAGS="$LINETAGS "
+
+      # First apply REMTAGS
+      for TAG in $REMTAGS; do
+        if [ "${LINETAGS#*$TAG }" != "$LINETAGS" ]; then
+          SFX="${LINETAGS#*$TAG }"
+          LINETAGS="${LINETAGS%$TAG *}$SFX"
+        fi
+      done
+
+      # Now apply ADDTAGS
+      for TAG in $ADDTAGS; do
+        if [ "${LINETAGS#*$TAG }" = "$LINETAGS" ]; then
+          LINETAGS="$LINETAGS$TAG "
+        fi
+      done
+
+      LINETAGS="${LINETAGS% }"
+      LINE=$(printf "%s%s" "$LINEPREFIX" "${LINETAGS:+ [$LINETAGS]}")
+      output_line "$LINE"
+    fi
+    [ -n "$SAVEFILE" ] && printf "%s\n" "$LINE" >> "$TODO_F.tmp"
+  done < "$TODO_F"
+
+  if [ -n "$SAVEFILE" ]; then
+    cp "$TODO_F" "$TODO_F.old"
+    mv "$TODO_F.tmp" "$TODO_F"
   fi
   exit 0
 }
@@ -132,8 +169,14 @@ do_todone_view() {
 ARGTAGS=""
 INPUT=""
 for ARG in "$@"; do
-  if [ "${ARG#@}" != "$ARG" ]; then
+  if [ "$SCRIPTNAME" = "todo-edit" ] && [ "$ARG" = "--save" ]; then
+    SAVEFILE=1
+  elif [ "${ARG#@}" != "$ARG" ]; then
     ARGTAGS="${ARGTAGS:+$ARGTAGS }$ARG"
+  elif [ "$SCRIPTNAME" = "todo-edit" ] && [ "${ARG#-@}" != "$ARG" ]; then
+    REMTAGS="${REMTAGS:+$REMTAGS }${ARG#-}"
+  elif [ "$SCRIPTNAME" = "todo-edit" ] && [ "${ARG#+@}" != "$ARG" ]; then
+    ADDTAGS="${ADDTAGS:+$ADDTAGS }${ARG#+}"
   else
     INPUT="${INPUT:+$INPUT }$ARG"
   fi
@@ -141,6 +184,8 @@ done
 
 if [ "$SCRIPTNAME" = "todo" ]; then
   do_todo
+elif [ "$SCRIPTNAME" = "todo-edit" ]; then
+  do_todo_edit
 elif [ "$SCRIPTNAME" = "todone" ]; then
   do_todone
 elif [ "$SCRIPTNAME" = "todone-archive" ]; then
