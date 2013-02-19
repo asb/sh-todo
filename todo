@@ -92,6 +92,30 @@ do_todo_edit() {
   exit 0
 }
 
+# Enter an environment where all todo-* commands will already include the 
+# given tasks. Useful for focusing on a certain subset of tasks. This relies 
+# on bash, and is not portable
+do_todo_focus() {
+  if [ -z "$ARGTAGS" ]; then
+    printf "Error: must specify at least one tag to enter todo-focus\n" >&2
+    exit 1
+  fi
+
+  TMPFILE=$(mktemp)
+  TAGS="$*"
+  cat <<EOF > $TMPFILE
+. /etc/bash.bashrc
+. ~/.bashrc
+alias todo="todo $ARGTAGS"
+alias todone="todone $ARGTAGS"
+alias todone-archive="todone-archive $ARGTAGS"
+alias todone-view="todone-view $ARGTAGS"
+export PS1="todo-focus $ARGTAGS \$PS1"
+EOF
+  bash --rcfile $TMPFILE -i
+  rm $TMPFILE
+}
+
 # Mark any tasks matching the given pattern as done. Tags can also be 
 # specified to limit the scope of the match
 do_todone() {
@@ -186,6 +210,8 @@ if [ "$SCRIPTNAME" = "todo" ]; then
   do_todo
 elif [ "$SCRIPTNAME" = "todo-edit" ]; then
   do_todo_edit
+elif [ "$SCRIPTNAME" = "todo-focus" ]; then
+  do_todo_focus
 elif [ "$SCRIPTNAME" = "todone" ]; then
   do_todone
 elif [ "$SCRIPTNAME" = "todone-archive" ]; then
