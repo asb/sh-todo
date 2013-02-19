@@ -195,8 +195,11 @@ INPUT=""
 for ARG in "$@"; do
   if [ "$SCRIPTNAME" = "todo-edit" ] && [ "$ARG" = "--save" ]; then
     SAVEFILE=1
-  elif [ "${ARG#@}" != "$ARG" ]; then
-    ARGTAGS="${ARGTAGS:+$ARGTAGS }$ARG"
+  elif [ "${ARG#@}" != "$ARG" ] ; then
+    ARGTST="$ARGTAGS "
+    if [ "${ARGTST#*$ARG }" = "$ARGTST" ]; then
+      ARGTAGS="${ARGTAGS:+$ARGTAGS }$ARG"
+    fi
   elif [ "$SCRIPTNAME" = "todo-edit" ] && [ "${ARG#-@}" != "$ARG" ]; then
     REMTAGS="${REMTAGS:+$REMTAGS }${ARG#-}"
   elif [ "$SCRIPTNAME" = "todo-edit" ] && [ "${ARG#+@}" != "$ARG" ]; then
