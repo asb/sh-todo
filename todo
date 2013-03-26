@@ -22,7 +22,9 @@ match_tags() {
 
 output_line() {
   LINE=$1
-  if [ "${LINE#DONE }" != "$LINE" ]; then
+  if [ $TODO_RAW ]; then
+    printf "%s\n" "$LINE"
+  elif [ "${LINE#DONE }" != "$LINE" ]; then
     printf "• $BEGIN_DONE%s$END_DONE\n" "${LINE#DONE }"
   else
     printf "• %s\n" "${LINE#TODO }"
