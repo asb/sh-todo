@@ -2,11 +2,11 @@
 # Part of sh-todo:
 # https://github.com/asb/sh-todo
 
-TODO_F=~/Dropbox/todo
-TODONE_F=~/Dropbox/todone
+: ${TODO_F:=~/Dropbox/todo}
+: ${TODONE_F:=~/Dropbox/todone}
 
-BEGIN_DONE="\033[9m"
-END_DONE="\033[29m"
+: ${BEGIN_DONE:="\033[9m"}
+: ${END_DONE:="\033[29m"}
 # Uncomment these if your terminal doesn't support strike-through
-#BEGIN_DONE="\033[37m"
-#END_DONE="\033[39m"
+#: ${BEGIN_DONE:="\033[37m"}
+#: ${END_DONE:="\033[39m"}
