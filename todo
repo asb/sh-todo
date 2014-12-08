@@ -118,9 +118,9 @@ EOF
   rm $TMPFILE
 }
 
-# Display sorted list of all tags
+# Display sorted list of all tags withing current todo file
 do_todo_tags() {
-  sed -n 's/^.[^@]\+//; s/ /\n/; s/]$//p' "$TODO_F" | sort | uniq
+  sed -n 's/^.*\[@/@/; s/ /\n/; s/]$//p' "$TODO_F" | sort | uniq
 }
 
 # Mark any tasks matching the given pattern as done. Tags can also be 
