@@ -118,6 +118,11 @@ EOF
   rm $TMPFILE
 }
 
+# Display sorted list of all tags
+do_todo_tags() {
+  sed -n 's/^.[^@]\+//; s/ /\n/; s/]$//p' "$TODO_F" | sort | uniq
+}
+
 # Mark any tasks matching the given pattern as done. Tags can also be 
 # specified to limit the scope of the match
 do_todone() {
@@ -217,6 +222,8 @@ elif [ "$SCRIPTNAME" = "todo-edit" ]; then
   do_todo_edit
 elif [ "$SCRIPTNAME" = "todo-focus" ]; then
   do_todo_focus
+elif [ "$SCRIPTNAME" = "todo-tags" ]; then
+  do_todo_tags
 elif [ "$SCRIPTNAME" = "todone" ]; then
   do_todone
 elif [ "$SCRIPTNAME" = "todone-archive" ]; then
