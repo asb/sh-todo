@@ -8,7 +8,7 @@
 
 CP="cp -a"
 
-#Destination of instalation
+#Destination of installation
 DESTETC=/etc/default
 
 
