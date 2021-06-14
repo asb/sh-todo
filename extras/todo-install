@@ -5,7 +5,7 @@
 # https://github.com/asb/sh-todo
 #
 # Install the todo* files into a classic Gnu-Linux system.
-# Requires root acces rights.
+# Requires root access rights.
 set -e
 
 ##--------------------------------------------------
@@ -15,7 +15,7 @@ set -e
 # comment this line and the below to run sudo by yourself.
 CP="sudo cp -a"
 
-## Alternative cp command without sudo for thoses who prefer.
+## Alternative cp command without sudo for those who prefer.
 ## Uncomment to active it.
 #CP="cp -a"
 
@@ -26,7 +26,7 @@ CHOWN="sudo chown -R root:root"
 ## Alternative chown command not tested if not root launched.
 #CHOWN="chown -R root:root"
 
-#Destination of instalation
+#Destination of installation
 DEST=/usr/bin
 DESTETC=/etc/default
 
